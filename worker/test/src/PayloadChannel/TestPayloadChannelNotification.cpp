@@ -27,7 +27,7 @@ SCENARIO("PayloadChannelNotification", "[channel][notification]")
 
 	SECTION("empty string")
 	{
-		char foo[]{};
+		char foo[]{""};
 
 		REQUIRE(PayloadChannel::PayloadChannelNotification::IsNotification(foo, sizeof(foo)) == false);
 	}

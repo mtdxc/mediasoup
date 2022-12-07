@@ -27,7 +27,7 @@ SCENARIO("PayloadChannelRequest", "[channel][request]")
 
 	SECTION("empty string")
 	{
-		char foo[]{};
+		char foo[]{""};
 
 		REQUIRE(PayloadChannel::PayloadChannelRequest::IsRequest(foo, sizeof(foo)) == false);
 	}
