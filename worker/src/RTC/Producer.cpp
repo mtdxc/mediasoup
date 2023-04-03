@@ -668,7 +668,24 @@ namespace RTC
 		}
 	}
 
-	Producer::ReceiveRtpPacketResult Producer::ReceiveRtpPacket(RTC::RtpPacket* packet)
+    void Producer::OnRecoveredPacket(const uint8_t* packet, size_t length)
+    {
+        uint8_t packet_temp[1536] = { 0 };
+        // 把内存重新拷贝一份。
+        memcpy(packet_temp, packet, length);
+
+        RTC::RtpPacket* recover_packet = RTC::RtpPacket::Parse(packet_temp, length);
+        if (!recover_packet) {
+            MS_WARN_TAG(rtp, "fec recover packet data is not a valid RTP packet");
+            return;
+        }
+
+        this->ReceiveRtpPacket(recover_packet, true);
+
+        MS_WARN_TAG(rtp, "fec packet recover [%s]", recover_packet->ToString().c_str());
+    }
+
+	Producer::ReceiveRtpPacketResult Producer::ReceiveRtpPacket(RTC::RtpPacket* packet, bool isRecover)
 	{
 		MS_TRACE();
 
@@ -701,7 +718,10 @@ namespace RTC
 		if (packet->GetSsrc() == rtpStream->GetSsrc())
 		{
 			result = ReceiveRtpPacketResult::MEDIA;
-
+            // FEC 或 media 都包进入模块进行处理
+            if (!rtpStream->FecReceivePacket(packet, isRecover)) {
+                return result;
+            }
 			// Process the packet.
 			if (!rtpStream->ReceivePacket(packet))
 			{
@@ -714,6 +734,11 @@ namespace RTC
 				return result;
 			}
 		}
+        else if (rtpStream->IsFlexFecPacket(packet)) {
+            // FEC 或 media 都包进入模块进行处理
+            rtpStream->FecReceivePacket(packet, isRecover);
+            return ReceiveRtpPacketResult::MEDIA;
+        }
 		// RTX packet.
 		else if (packet->GetSsrc() == rtpStream->GetRtxSsrc())
 		{

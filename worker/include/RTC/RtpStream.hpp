@@ -54,6 +54,11 @@ namespace RTC
 			bool useFir{ false };
 			bool useInBandFec{ false };
 			bool useDtx{ false };
+            // for flexfec
+            bool useFec{ false };
+            uint32_t fecSsrc{ 0u };
+            uint8_t fecPayloadType{ 0u };
+
 			uint8_t spatialLayers{ 1u };
 			uint8_t temporalLayers{ 1u };
 		};
@@ -92,7 +97,18 @@ namespace RTC
 		{
 			return this->params.cname;
 		}
-		bool HasRtx() const
+
+        virtual void SetFec(uint8_t payloadType, uint32_t ssrc);
+        uint32_t GetFecSsrc() const
+        {
+            return this->params.fecSsrc;
+        }
+        uint8_t GetFecPayloadType() const
+        {
+            return this->params.fecPayloadType;
+        }
+
+        bool HasRtx() const
 		{
 			return this->rtxStream != nullptr;
 		}

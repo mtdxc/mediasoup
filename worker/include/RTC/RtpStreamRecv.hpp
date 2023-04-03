@@ -7,6 +7,7 @@
 #include "RTC/RtpStream.hpp"
 #include "handles/Timer.hpp"
 #include <vector>
+#include "modules/rtp_rtcp/include/flexfec_receiver.h"
 
 namespace RTC
 {
@@ -77,6 +78,14 @@ namespace RTC
 			return this->transmissionCounter.GetLayerBitrate(nowMs, spatialLayer, temporalLayer);
 		}
 
+        /* ---------- flexfec ---------- */
+        bool FecReceivePacket(RTC::RtpPacket* packet, bool isRecover);
+        bool IsFlexFecPacket(RTC::RtpPacket* packet);
+
+        std::unique_ptr<webrtc::FlexfecReceiver> flexfecReceiver;
+        uint32_t packetFecCount{ 0u };
+        uint32_t packetFecRepair{ 0u };
+        /* ---------- flexfec ---------- */
 	private:
 		void CalculateJitter(uint32_t rtpTimestamp);
 		void UpdateScore();

@@ -15,6 +15,7 @@
 #include "RTC/RtpPacket.hpp"
 #include "RTC/RtpStreamRecv.hpp"
 #include "RTC/Shared.hpp"
+#include "modules/rtp_rtcp/include/rtp_rtcp_defines.h"
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
@@ -26,7 +27,8 @@ namespace RTC
 	class Producer : public RTC::RtpStreamRecv::Listener,
 	                 public RTC::KeyFrameRequestManager::Listener,
 	                 public Channel::ChannelSocket::RequestHandler,
-	                 public PayloadChannel::PayloadChannelSocket::NotificationHandler
+	                 public PayloadChannel::PayloadChannelSocket::NotificationHandler,
+                     public webrtc::RecoveredPacketReceiver
 	{
 	public:
 		class Listener
@@ -127,7 +129,8 @@ namespace RTC
 		{
 			return std::addressof(this->rtpStreamScores);
 		}
-		ReceiveRtpPacketResult ReceiveRtpPacket(RTC::RtpPacket* packet);
+        virtual void OnRecoveredPacket(const uint8_t* packet, size_t length) override;
+		ReceiveRtpPacketResult ReceiveRtpPacket(RTC::RtpPacket* packet, bool isRecover);
 		void ReceiveRtcpSenderReport(RTC::RTCP::SenderReport* report);
 		void ReceiveRtcpXrDelaySinceLastRr(RTC::RTCP::DelaySinceLastRr::SsrcInfo* ssrcInfo);
 		bool GetRtcp(RTC::RTCP::CompoundPacket* packet, uint64_t nowMs);

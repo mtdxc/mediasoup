@@ -679,7 +679,47 @@ namespace RTC
 		}
 	}
 
-	void RtpStreamRecv::CalculateJitter(uint32_t rtpTimestamp)
+    bool RtpStreamRecv::FecReceivePacket(RTC::RtpPacket* packet, bool isRecover)
+    {
+        if (this->params.useFec) {
+            MS_WARN_TAG(rtp,
+                "fec packet receive [%s]",
+                packet->ToString().c_str());
+            // 所有数据都入 fec 解码模块
+            if (flexfecReceiver) {
+                webrtc::RtpPacketReceived parsed_packet(nullptr);
+                if (!parsed_packet.Parse(packet->GetData(), packet->GetSize())) {
+                    MS_WARN_TAG(rtp, "receive fec packet but parsed_packet failed!");
+                    return false;
+                }
+                // 如果是恢复包打上恢复记号
+                parsed_packet.set_recovered(isRecover);
+
+                flexfecReceiver->OnRtpPacket(parsed_packet);
+            }
+            else {
+                MS_WARN_TAG(rtp, "receive fec packet but receiver is not exit");
+                // do not things
+            }
+        }
+
+        if (isRecover)
+            packetFecRepair++;
+
+        // fec包跳过后续流程
+        if (IsFlexFecPacket(packet)) {
+            packetFecCount++;
+            return false;
+        }
+        return true;
+    }
+
+    bool RtpStreamRecv::IsFlexFecPacket(RTC::RtpPacket* packet)
+    {
+        return packet->GetSsrc() == this->params.fecSsrc && packet->GetPayloadType() == this->params.fecPayloadType;
+    }
+
+    void RtpStreamRecv::CalculateJitter(uint32_t rtpTimestamp)
 	{
 		MS_TRACE();
 
