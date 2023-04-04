@@ -1718,9 +1718,8 @@ namespace RTC
 
 			MS_WARN_TAG(
 			  rtp,
-			  "no suitable Producer for received RTP packet [ssrc:%" PRIu32 ", payloadType:%" PRIu8 "]",
-			  packet->GetSsrc(),
-			  packet->GetPayloadType());
+			  "no suitable Producer for received RTP packet [%s]",
+              packet->ToString().c_str());
 
 			// Tell the child class to remove this SSRC.
 			RecvStreamClosed(packet->GetSsrc());
@@ -1731,13 +1730,12 @@ namespace RTC
 		}
 
 		// MS_DEBUG_DEV(
-		//   "RTP packet received [ssrc:%" PRIu32 ", payloadType:%" PRIu8 ", producerId:%s]",
-		//   packet->GetSsrc(),
-		//   packet->GetPayloadType(),
+		//   "RTP packet received [%s, producerId:%s]",
+		//   packet->ToString().c_str(),
 		//   producer->id.c_str());
 
 		// Pass the RTP packet to the corresponding Producer.
-		auto result = producer->ReceiveRtpPacket(packet);
+		auto result = producer->ReceiveRtpPacket(packet, false);
 
 		switch (result)
 		{

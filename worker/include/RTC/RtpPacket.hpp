@@ -147,7 +147,7 @@ namespace RTC
 		~RtpPacket();
 
 		void Dump() const;
-
+        std::string ToString() const;
 		void FillJson(json& jsonObject) const;
 
 		const uint8_t* GetData() const

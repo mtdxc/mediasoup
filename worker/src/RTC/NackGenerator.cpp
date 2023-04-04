@@ -70,9 +70,8 @@ namespace RTC
 			if (it != this->nackList.end())
 			{
 				MS_DEBUG_DEV(
-				  "NACKed packet received [ssrc:%" PRIu32 ", seq:%" PRIu16 ", recovered:%s]",
-				  packet->GetSsrc(),
-				  packet->GetSequenceNumber(),
+				  "NACKed packet received [%s, recovered:%s]",
+				  packet->ToString().c_str(),
 				  isRecovered ? "true" : "false");
 
 				auto retries = it->second.retries;
@@ -89,9 +88,8 @@ namespace RTC
 			if (!isRecovered)
 			{
 				MS_WARN_DEV(
-				  "ignoring older packet not present in the NACK list [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-				  packet->GetSsrc(),
-				  packet->GetSequenceNumber());
+				  "ignoring older packet not present in the NACK list [%s]",
+				  packet->ToString().c_str());
 			}
 
 			return false;

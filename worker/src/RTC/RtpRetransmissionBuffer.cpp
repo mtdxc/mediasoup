@@ -92,11 +92,8 @@ namespace RTC
 		{
 			MS_WARN_TAG(
 			  rtp,
-			  "packet has lower seq but higher timestamp than newest packet in the buffer, emptying the buffer [ssrc:%" PRIu32
-			  ", seq:%" PRIu16 ", timestamp:%" PRIu32 "]",
-			  ssrc,
-			  seq,
-			  timestamp);
+			  "packet has lower seq but higher timestamp than newest packet in the buffer, emptying the buffer [%s]",
+                packet->ToString().c_str());
 
 			Clear();
 
@@ -156,11 +153,8 @@ namespace RTC
 			{
 				MS_WARN_TAG(
 				  rtp,
-				  "packet has higher seq but lower timestamp than newest packet in the buffer, discarding it [ssrc:%" PRIu32
-				  ", seq:%" PRIu16 ", timestamp:%" PRIu32 "]",
-				  ssrc,
-				  seq,
-				  timestamp);
+				  "packet has higher seq but lower timestamp than newest packet in the buffer, discarding it [%s]",
+				  packet->ToString().c_str());
 
 				return;
 			}
@@ -182,11 +176,8 @@ namespace RTC
 				{
 					MS_WARN_TAG(
 					  rtp,
-					  "packet has too high seq and forces buffer emptying [ssrc:%" PRIu32 ", seq:%" PRIu16
-					  ", timestamp:%" PRIu32 "]",
-					  ssrc,
-					  seq,
-					  timestamp);
+					  "packet has too high seq and forces buffer emptying [%s]",
+					  packet->ToString().c_str());
 
 					numBlankSlots = 0u;
 
@@ -244,11 +235,8 @@ namespace RTC
 			{
 				MS_WARN_TAG(
 				  rtp,
-				  "packet has lower seq but higher timestamp than oldest packet in the buffer, discarding it [ssrc:%" PRIu32
-				  ", seq:%" PRIu16 ", timestamp:%" PRIu32 "]",
-				  ssrc,
-				  seq,
-				  timestamp);
+				  "packet has lower seq but higher timestamp than oldest packet in the buffer, discarding it [%s]",
+				  packet->ToString().c_str());
 
 				return;
 			}
@@ -263,11 +251,8 @@ namespace RTC
 			{
 				MS_WARN_TAG(
 				  rtp,
-				  "discarding received old packet to not exceed max buffer size [ssrc:%" PRIu32
-				  ", seq:%" PRIu16 ", timestamp:%" PRIu32 "]",
-				  ssrc,
-				  seq,
-				  timestamp);
+				  "discarding received old packet to not exceed max buffer size [%s]",
+                  packet->ToString().c_str());
 
 				return;
 			}
@@ -331,11 +316,8 @@ namespace RTC
 				{
 					MS_WARN_TAG(
 					  rtp,
-					  "packet timestamp is lower than timestamp of immediate older packet in the buffer, discarding it [ssrc:%" PRIu32
-					  ", seq:%" PRIu16 ", timestamp:%" PRIu32 "]",
-					  ssrc,
-					  seq,
-					  timestamp);
+					  "packet timestamp is lower than timestamp of immediate older packet in the buffer, discarding it [%s]",
+                      packet->ToString().c_str());
 
 					return;
 				}
@@ -362,11 +344,8 @@ namespace RTC
 				{
 					MS_WARN_TAG(
 					  rtp,
-					  "packet timestamp is higher than timestamp of immediate newer packet in the buffer, discarding it [ssrc:%" PRIu32
-					  ", seq:%" PRIu16 ", timestamp:%" PRIu32 "]",
-					  ssrc,
-					  seq,
-					  timestamp);
+					  "packet timestamp is higher than timestamp of immediate newer packet in the buffer, discarding it [%s]",
+                      packet->ToString().c_str());
 
 					return;
 				}

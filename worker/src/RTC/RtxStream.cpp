@@ -58,9 +58,8 @@ namespace RTC
 		{
 			MS_WARN_TAG(
 			  rtx,
-			  "invalid packet [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber());
+			  "invalid packet [%s]",
+              packet->ToString().c_str());
 
 			return false;
 		}
@@ -187,9 +186,8 @@ namespace RTC
 				// telling us so just re-sync (i.e., pretend this was the first packet).
 				MS_WARN_TAG(
 				  rtx,
-				  "too bad sequence number, re-syncing RTP [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-				  packet->GetSsrc(),
-				  packet->GetSequenceNumber());
+				  "too bad sequence number, re-syncing RTP [%s]",
+                    packet->ToString().c_str());
 
 				InitSeq(seq);
 
@@ -200,9 +198,8 @@ namespace RTC
 			{
 				MS_WARN_TAG(
 				  rtx,
-				  "bad sequence number, ignoring packet [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-				  packet->GetSsrc(),
-				  packet->GetSequenceNumber());
+				  "bad sequence number, ignoring packet [%s]",
+                  packet->ToString().c_str());
 
 				this->badSeq = (seq + 1) & (RtpSeqMod - 1);
 

@@ -736,11 +736,7 @@ namespace RTC
 
 		if (packet->IsKeyFrame())
 		{
-			MS_DEBUG_TAG(
-			  rtp,
-			  "key frame received [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber());
+			MS_DEBUG_TAG(rtp, "key frame received [%s]", packet->ToString().c_str());
 
 			// Tell the keyFrameRequestManager.
 			if (this->keyFrameRequestManager)

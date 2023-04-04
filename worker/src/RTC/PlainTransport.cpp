@@ -889,10 +889,8 @@ namespace RTC
 			{
 				MS_WARN_TAG(
 				  srtp,
-				  "DecryptSrtp() failed [ssrc:%" PRIu32 ", payloadType:%" PRIu8 ", seq:%" PRIu16 "]",
-				  packet->GetSsrc(),
-				  packet->GetPayloadType(),
-				  packet->GetSequenceNumber());
+				  "DecryptSrtp() failed [%s]",
+				  packet->ToString().c_str());
 
 				delete packet;
 			}

@@ -317,7 +317,16 @@ namespace RTC
 		MS_DUMP("</RtpPacket>");
 	}
 
-	void RtpPacket::FillJson(json& jsonObject) const
+    std::string RtpPacket::ToString() const
+    {
+        char line[256] = {0};
+        std::snprintf(line, sizeof(line), 
+            "ssrc:%" PRIu32 ", pt : %" PRIu8 ", seq : %" PRIu16,
+            GetSsrc(), GetPayloadType(), GetSequenceNumber());
+        return line;
+    }
+
+    void RtpPacket::FillJson(json& jsonObject) const
 	{
 		MS_TRACE();
 

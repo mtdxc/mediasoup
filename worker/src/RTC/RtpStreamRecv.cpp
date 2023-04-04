@@ -337,11 +337,8 @@ namespace RTC
 		{
 			MS_WARN_TAG(
 			  rtx,
-			  "ignoring RTX packet with invalid payload type [ssrc:%" PRIu32 ", seq:%" PRIu16
-			  ", pt:%" PRIu8 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
-			  packet->GetPayloadType());
+			  "ignoring RTX packet with invalid payload type [%s]",
+              packet->ToString().c_str());
 
 			return false;
 		}
@@ -365,30 +362,25 @@ namespace RTC
 		if (!packet->RtxDecode(this->params.payloadType, this->params.ssrc))
 		{
 			MS_DEBUG_DEV(
-			  "ignoring empty RTX packet [ssrc:%" PRIu32 ", seq:%" PRIu16 ", pt:%" PRIu8 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
-			  packet->GetPayloadType());
+			  "ignoring empty RTX packet [%s]",
+              packet->ToString().c_str());
 
 			return false;
 		}
 
 		MS_DEBUG_DEV(
-		  "received RTX packet [ssrc:%" PRIu32 ", seq:%" PRIu16 "] recovering original [ssrc:%" PRIu32
-		  ", seq:%" PRIu16 "]",
+		  "received RTX packet [ssrc:%" PRIu32 ", seq:%" PRIu16 "] recovering original [%s]",
 		  this->params.rtxSsrc,
 		  rtxSeq,
-		  packet->GetSsrc(),
-		  packet->GetSequenceNumber());
+          packet->ToString().c_str());
 
 		// If not a valid packet ignore it.
 		if (!RTC::RtpStream::UpdateSeq(packet))
 		{
 			MS_WARN_TAG(
 			  rtx,
-			  "invalid RTX packet [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber());
+			  "invalid RTX packet [%s]",
+              packet->ToString().c_str());
 
 			return false;
 		}

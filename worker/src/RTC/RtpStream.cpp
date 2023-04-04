@@ -80,7 +80,16 @@ namespace RTC
 			jsonObject["roundTripTime"] = this->rtt;
 	}
 
-	void RtpStream::SetRtx(uint8_t payloadType, uint32_t ssrc)
+    void RtpStream::SetFec(uint8_t payloadType, uint32_t ssrc)
+    {
+        MS_TRACE();
+
+        this->params.fecPayloadType = payloadType;
+        this->params.fecSsrc = ssrc;
+        this->params.useFec = ssrc && payloadType;
+    }
+
+    void RtpStream::SetRtx(uint8_t payloadType, uint32_t ssrc)
 	{
 		MS_TRACE();
 
@@ -132,9 +141,8 @@ namespace RTC
 		{
 			MS_WARN_TAG(
 			  rtp,
-			  "invalid packet [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber());
+			  "invalid packet [%s]",
+			  packet->ToString().c_str());
 
 			return false;
 		}
@@ -205,9 +213,8 @@ namespace RTC
 				// telling us so just re-sync (i.e., pretend this was the first packet).
 				MS_WARN_TAG(
 				  rtp,
-				  "too bad sequence number, re-syncing RTP [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-				  packet->GetSsrc(),
-				  packet->GetSequenceNumber());
+				  "too bad sequence number, re-syncing RTP [%s]",
+				  packet->ToString().c_str());
 
 				InitSeq(seq);
 
@@ -221,9 +228,8 @@ namespace RTC
 			{
 				MS_WARN_TAG(
 				  rtp,
-				  "bad sequence number, ignoring packet [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-				  packet->GetSsrc(),
-				  packet->GetSequenceNumber());
+				  "bad sequence number, ignoring packet [%s]",
+                  packet->ToString().c_str());
 
 				this->badSeq = (seq + 1) & (RtpSeqMod - 1);
 

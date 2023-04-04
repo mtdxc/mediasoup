@@ -701,11 +701,8 @@ namespace RTC
 		{
 			MS_DEBUG_TAG(
 			  rtp,
-			  "sending sync packet [ssrc:%" PRIu32 ", seq:%" PRIu16 ", ts:%" PRIu32
-			  "] from original [seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
-			  packet->GetTimestamp(),
+			  "sending sync packet [%s] from original [seq:%" PRIu16 "]",
+              packet->ToString().c_str(),
 			  origSeq);
 		}
 
@@ -722,11 +719,8 @@ namespace RTC
 		{
 			MS_WARN_TAG(
 			  rtp,
-			  "failed to send packet [ssrc:%" PRIu32 ", seq:%" PRIu16 ", ts:%" PRIu32
-			  "] from original [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
-			  packet->GetTimestamp(),
+			  "failed to send packet [%s] from original [ssrc:%" PRIu32 ", seq:%" PRIu16 "]",
+              packet->ToString().c_str(),
 			  origSsrc,
 			  origSeq);
 		}

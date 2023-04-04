@@ -292,11 +292,7 @@ namespace RTC
 		// Process the payload if needed. Drop packet if necessary.
 		if (this->encodingContext && !packet->ProcessPayload(this->encodingContext.get(), marker))
 		{
-			MS_DEBUG_DEV(
-			  "discarding packet [ssrc:%" PRIu32 ", seq:%" PRIu16 ", ts:%" PRIu32 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
-			  packet->GetTimestamp());
+			MS_DEBUG_DEV("discarding packet [%s]", packet->ToString().c_str());
 
 			this->rtpSeqManager.Drop(packet->GetSequenceNumber());
 
@@ -348,11 +344,8 @@ namespace RTC
 		{
 			MS_DEBUG_TAG(
 			  rtp,
-			  "sending sync packet [ssrc:%" PRIu32 ", seq:%" PRIu16 ", ts:%" PRIu32
-			  "] from original [seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
-			  packet->GetTimestamp(),
+			  "sending sync packet [%s] from original [seq:%" PRIu16 "]",
+              packet->ToString().c_str(),
 			  origSeq);
 		}
 
@@ -369,11 +362,8 @@ namespace RTC
 		{
 			MS_WARN_TAG(
 			  rtp,
-			  "failed to send packet [ssrc:%" PRIu32 ", seq:%" PRIu16 ", ts:%" PRIu32
-			  "] from original [seq:%" PRIu16 "]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
-			  packet->GetTimestamp(),
+			  "failed to send packet [%s] from original [seq:%" PRIu16 "]",
+              packet->ToString().c_str(),
 			  origSeq);
 		}
 

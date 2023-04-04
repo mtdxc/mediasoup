@@ -360,9 +360,8 @@ namespace RTC
 		{
 			MS_WARN_TAG(
 			  rtp,
-			  "packet too big [ssrc:%" PRIu32 ", seq:%" PRIu16 ", size:%zu]",
-			  packet->GetSsrc(),
-			  packet->GetSequenceNumber(),
+			  "packet too big [%s, size:%zu]",
+              packet->ToString().c_str(),
 			  packet->GetSize());
 
 			return;
