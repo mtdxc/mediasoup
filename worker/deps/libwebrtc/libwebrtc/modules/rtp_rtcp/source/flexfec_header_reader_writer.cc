@@ -52,8 +52,7 @@ constexpr uint8_t kSsrcCount = 1;
 constexpr uint32_t kReservedBits = 0;
 
 // TODO(brandtr): Update this when we support multistream protection.
-constexpr size_t kPacketMaskOffset =
-    kBaseHeaderSize + kStreamSpecificHeaderSize;
+constexpr size_t kPacketMaskOffset = kBaseHeaderSize + kStreamSpecificHeaderSize;
 
 // Here we count the K-bits as belonging to the packet mask.
 // This can be used in conjunction with FlexfecHeaderWriter::MinPacketMaskSize,

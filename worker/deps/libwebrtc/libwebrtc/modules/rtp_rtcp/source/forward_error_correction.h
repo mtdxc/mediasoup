@@ -80,9 +80,6 @@ class ForwardErrorCorrection {
   // arguments.
   class ReceivedPacket : public SortablePacket {
    public:
-    ReceivedPacket();
-    ~ReceivedPacket();
-
     bool is_fec;  // Set to true if this is an FEC packet and false
                   // otherwise.
     rtc::scoped_refptr<Packet> pkt;  // Pointer to the packet storage.
@@ -93,9 +90,6 @@ class ForwardErrorCorrection {
   // TODO(holmer): Refactor into a proper class.
   class RecoveredPacket : public SortablePacket {
    public:
-    RecoveredPacket();
-    ~RecoveredPacket();
-
     bool was_recovered;  // Will be true if this packet was recovered by
                          // the FEC. Otherwise it was a media packet passed in
                          // through the received packet list.
@@ -109,10 +103,7 @@ class ForwardErrorCorrection {
   // TODO(holmer): Refactor into a proper class.
   class ProtectedPacket : public SortablePacket {
    public:
-    ProtectedPacket();
-    ~ProtectedPacket();
-
-    rtc::scoped_refptr<ForwardErrorCorrection::Packet> pkt;
+    rtc::scoped_refptr<Packet> pkt;
   };
 
   using ProtectedPacketList = std::list<std::unique_ptr<ProtectedPacket>>;
@@ -122,9 +113,6 @@ class ForwardErrorCorrection {
   // TODO(holmer): Refactor into a proper class.
   class ReceivedFecPacket : public SortablePacket {
    public:
-    ReceivedFecPacket();
-    ~ReceivedFecPacket();
-
     // List of media packets that this FEC packet protects.
     ProtectedPacketList protected_packets;
     // RTP header fields.
@@ -137,7 +125,7 @@ class ForwardErrorCorrection {
     size_t packet_mask_size;
     size_t protection_length;
     // Raw data.
-    rtc::scoped_refptr<ForwardErrorCorrection::Packet> pkt;
+    rtc::scoped_refptr<Packet> pkt;
   };
 
   using PacketList = std::list<std::unique_ptr<Packet>>;
@@ -183,8 +171,7 @@ class ForwardErrorCorrection {
   // Output: fec_packets            List of pointers to generated FEC packets,
   //                                of type Packet. Must be empty on entry.
   //                                The memory available through the list will
-  //                                be valid until the next call to
-  //                                EncodeFec().
+  //                                be valid until the next call to EncodeFec().                    
   //
   // Returns 0 on success, -1 on failure.
   //

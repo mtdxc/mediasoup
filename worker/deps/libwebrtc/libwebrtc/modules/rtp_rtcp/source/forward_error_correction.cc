@@ -60,18 +60,6 @@ bool ForwardErrorCorrection::SortablePacket::LessThan::operator()(
   return IsNewerSequenceNumber(second->seq_num, first->seq_num);
 }
 
-ForwardErrorCorrection::ReceivedPacket::ReceivedPacket() = default;
-ForwardErrorCorrection::ReceivedPacket::~ReceivedPacket() = default;
-
-ForwardErrorCorrection::RecoveredPacket::RecoveredPacket() = default;
-ForwardErrorCorrection::RecoveredPacket::~RecoveredPacket() = default;
-
-ForwardErrorCorrection::ProtectedPacket::ProtectedPacket() = default;
-ForwardErrorCorrection::ProtectedPacket::~ProtectedPacket() = default;
-
-ForwardErrorCorrection::ReceivedFecPacket::ReceivedFecPacket() = default;
-ForwardErrorCorrection::ReceivedFecPacket::~ReceivedFecPacket() = default;
-
 ForwardErrorCorrection::ForwardErrorCorrection(
     std::unique_ptr<FecHeaderReader> fec_header_reader,
     std::unique_ptr<FecHeaderWriter> fec_header_writer,
@@ -130,17 +118,14 @@ int ForwardErrorCorrection::EncodeFec(const PacketList& media_packets,
    RTC_DCHECK(media_packet);
     if (media_packet->length < kRtpHeaderSize) {
       RTC_LOG(LS_WARNING) << "Media packet " << media_packet->length
-                          << " bytes "
-                          << "is smaller than RTP header.";
+                          << " is smaller than RTP header.";
       return -1;
     }
     // Ensure the FEC packets will fit in a typical MTU.
     if (media_packet->length + MaxPacketOverhead() + kTransportOverhead >
         IP_PACKET_SIZE) {
       RTC_LOG(LS_WARNING) << "Media packet " << media_packet->length
-                          << " bytes "
-                          << "with overhead is larger than " << IP_PACKET_SIZE
-                          << " bytes.";
+                          << "with overhead is larger than " << IP_PACKET_SIZE;
     }
   }
 
@@ -178,8 +163,7 @@ int ForwardErrorCorrection::EncodeFec(const PacketList& media_packets,
   // TODO(brandtr): Generalize this when multistream protection support is
   // added.
   const uint32_t media_ssrc = ParseSsrc(media_packets.front()->data);
-  const uint16_t seq_num_base =
-      ParseSequenceNumber(media_packets.front()->data);
+  const uint16_t seq_num_base = ParseSequenceNumber(media_packets.front()->data);
   FinalizeFecHeaders(num_fec_packets, media_ssrc, seq_num_base);
 
   return 0;
