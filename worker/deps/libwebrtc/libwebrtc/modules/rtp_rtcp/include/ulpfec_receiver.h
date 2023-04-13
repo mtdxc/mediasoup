@@ -47,8 +47,7 @@ class UlpfecReceiver {
   //
   // TODO(brandtr): Set |ulpfec_payload_type| during constructor call,
   // rather than as a parameter here.
-  virtual int32_t AddReceivedRedPacket(const RTPHeader& rtp_header,
-                                       const uint8_t* incoming_rtp_packet,
+  virtual int32_t AddReceivedRedPacket(const uint8_t* incoming_rtp_packet,
                                        size_t packet_length,
                                        uint8_t ulpfec_payload_type) = 0;
 

@@ -33,8 +33,7 @@ class UlpfecReceiverImpl : public UlpfecReceiver {
                               rtc::ArrayView<const RtpExtension> extensions);
   ~UlpfecReceiverImpl() override;
 
-  int32_t AddReceivedRedPacket(const RTPHeader& rtp_header,
-                               const uint8_t* incoming_rtp_packet,
+  int32_t AddReceivedRedPacket(const uint8_t* incoming_rtp_packet,
                                size_t packet_length,
                                uint8_t ulpfec_payload_type) override;
 

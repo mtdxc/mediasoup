@@ -18,6 +18,7 @@
 #include "absl/memory/memory.h"
 #include "api/scoped_refptr.h"
 #include "modules/rtp_rtcp/source/byte_io.h"
+#include "modules/rtp_rtcp/source/rtp_utility.h"
 #include "modules/rtp_rtcp/source/rtp_packet_received.h"
 #include "rtc_base/logging.h"
 #include "rtc_base/time_utils.h"
@@ -79,10 +80,13 @@ FecPacketCounter UlpfecReceiverImpl::GetPacketCounter() const {
 //        block excluding header.
 
 int32_t UlpfecReceiverImpl::AddReceivedRedPacket(
-    const RTPHeader& header,
     const uint8_t* incoming_rtp_packet,
     size_t packet_length,
     uint8_t ulpfec_payload_type) {
+  RTPHeader header;
+  RtpUtility::RtpHeaderParser parse(incoming_rtp_packet, packet_length);
+  parse.Parse(&header);
+
   if (header.ssrc != ssrc_) {
     RTC_LOG(LS_WARNING) << "Received RED packet with different SSRC than expected; dropping.";
     return -1;
